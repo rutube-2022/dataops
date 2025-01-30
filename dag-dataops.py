@@ -8,7 +8,7 @@ dag = DAG ('dataops')
 def check():
     con = psycopg2.connect(host="psql-postgresql.psql.svc",
                            database="airflow",
-                           user="airflow1",
+                           user="airflow",
                            password="airflow")
     nncur = con.cursor()
     nncur.execute ("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'")
