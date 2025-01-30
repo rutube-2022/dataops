@@ -3,12 +3,12 @@ from airflow.operators.python_operator import PythonOperator
 #import sqlalchemy
 import psycopg2
   
-dag = DAG ('tusur-exam')
+dag = DAG ('dataops')
 
 def check():
     con = psycopg2.connect(host="psql-postgresql.psql.svc",
                            database="airflow",
-                           user="airflow",
+                           user="airflow1",
                            password="airflow")
     nncur = con.cursor()
     nncur.execute ("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'")
