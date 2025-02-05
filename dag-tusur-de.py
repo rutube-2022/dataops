@@ -133,7 +133,8 @@ def pearson(task_instance):
     #for chunk_corr in chunk_results:
     #    combined_corr += chunk_corr
     #combined_corr /= num_chunks
-    filtered_corr_ps = df.corr(method='pearson') #combined_corr[(combined_corr > 0) & (combined_corr != 1.0)]
+    combined_corr = df.coor(method='pearson')
+    filtered_corr_ps = combined_corr[(combined_corr > 0) & (combined_corr != 1.0)]
     filtered_corr_ps = filtered_corr_ps.dropna(how='all').dropna(axis=1, how='all')
     filtered_corr_ps = filtered_corr_ps.loc[['prep_minutes']].dropna(axis=1)
     task_instance.xcom_push(key="pearson", value=filtered_corr_ps)
@@ -151,7 +152,8 @@ def spearman(task_instance):
     #for chunk_corr in chunk_results:
     #    combined_corr += chunk_corr
     #combined_corr /= num_chunks
-    filtered_corr_sp = df.corr(method='spearman') #combined_corr[(combined_corr > 0) & (combined_corr != 1.0)]
+    combined_corr = df.coor(method='spearman')
+    filtered_corr_sp = combined_corr[(combined_corr > 0) & (combined_corr != 1.0)]
     filtered_corr_sp = filtered_corr_sp.dropna(how='all').dropna(axis=1, how='all')
     filtered_corr_sp = filtered_corr_sp.loc[['prep_minutes']].dropna(axis=1)
     task_instance.xcom_push(key="spearman", value=filtered_corr_sp)
@@ -169,7 +171,8 @@ def kendall(task_instance):
     #for chunk_corr in chunk_results:
     #    combined_corr += chunk_corr
     #combined_corr /= num_chunks
-    filtered_corr_kn = df.corr(method='kendall') #combined_corr[(combined_corr > 0) & (combined_corr != 1.0)]
+    combined_corr = df.coor(method='kendall')
+    filtered_corr_kn = combined_corr[(combined_corr > 0) & (combined_corr != 1.0)]
     filtered_corr_kn = filtered_corr_kn.dropna(how='all').dropna(axis=1, how='all')
     filtered_corr_kn = filtered_corr_kn.loc[['prep_minutes']].dropna(axis=1)
     task_instance.xcom_push(key="kendall", value=filtered_corr_kn)
