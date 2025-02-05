@@ -201,6 +201,11 @@ def ML(task_instance):
     if mlflow.get_experiment_by_name("Tusur-DE") is None:
         mlflow.create_experiment("Tusur-DE", artifact_location="s3://kserve/mlflow")
     mlflow.set_experiment("Tusur-DE")
+
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    AWS_DEFAULT_REGION = os.environ.get('AWS_DEFAULT_REGION')
+    AWS_ENDPOINT_URL = os.environ.get('AWS_ENDPOINT_URL')
     
     mlflow.start_run(run_name=f"PAR")
     for scor in ['neg_mean_squared_error', 'neg_mean_absolute_error', 'neg_mean_absolute_percentage_error', 'neg_median_absolute_error']:
@@ -301,6 +306,11 @@ def further_train(task_instance):
 
     mlflow.set_tracking_uri(uri="http://ml.fatal-error.ru:8181")
     mlflow.set_experiment("Tusur-DE")
+
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    AWS_DEFAULT_REGION = os.environ.get('AWS_DEFAULT_REGION')
+    AWS_ENDPOINT_URL = os.environ.get('AWS_ENDPOINT_URL')
 
     mlflow.start_run(run_name="PAR")
     for ml in mlflow.search_registered_models(filter_string="name LIKE '%par%'"):
