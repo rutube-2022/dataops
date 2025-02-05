@@ -30,7 +30,7 @@ dag = DAG (
     catchup=False)
 
 def read_data(task_instance):
-    count = int(Variable.get('count')
+    count = int(Variable.get('count'))
     part = int(Variable.get('part', default_var=None))
     if part is None:
         Variable.set('part', 0)
