@@ -119,54 +119,54 @@ def data_processing(task_instance):
 
 def pearson(task_instance):
     df=task_instance.xcom_pull(key="df_data_proc", task_ids="data_processing_task")
-    num_chunks = mp.cpu_count()
-    chunks = np.array_split(df, num_chunks)
-    def process_data (df_chunk):
-        pearson_corr = df_chunk.corr(method='pearson')
-        return pearson_corr
-    with mp.Pool(processes=num_chunks) as pool:
-        chunk_results = pool.map(process_data, chunks)
-    combined_corr = pd.DataFrame(np.zeros((df.shape[1], df.shape[1])), columns=df.columns, index=df.columns)
-    for chunk_corr in chunk_results:
-        combined_corr += chunk_corr
-    combined_corr /= num_chunks
-    filtered_corr_ps = combined_corr[(combined_corr > 0) & (combined_corr != 1.0)]
+    #num_chunks = mp.cpu_count()
+    #chunks = np.array_split(df, num_chunks)
+    #def process_data (df_chunk):
+    #    pearson_corr = df_chunk.corr(method='pearson')
+    #    return pearson_corr
+    #with mp.Pool(processes=num_chunks) as pool:
+    #    chunk_results = pool.map(process_data, chunks)
+    #combined_corr = pd.DataFrame(np.zeros((df.shape[1], df.shape[1])), columns=df.columns, index=df.columns)
+    #for chunk_corr in chunk_results:
+    #    combined_corr += chunk_corr
+    #combined_corr /= num_chunks
+    filtered_corr_ps = df.corr(method='pearson') #combined_corr[(combined_corr > 0) & (combined_corr != 1.0)]
     filtered_corr_ps = filtered_corr_ps.dropna(how='all').dropna(axis=1, how='all')
     filtered_corr_ps = filtered_corr_ps.loc[['prep_minutes']].dropna(axis=1)
     task_instance.xcom_push(key="pearson", value=filtered_corr_ps)
 
 def spearman(task_instance):
     df=task_instance.xcom_pull(key="df_data_proc", task_ids="data_processing_task")
-    num_chunks = mp.cpu_count()
-    chunks = np.array_split(df, num_chunks)
-    def process_data (df_chunk):
-        pearson_corr = df_chunk.corr(method='spearman')
-        return pearson_corr
-    with mp.Pool(processes=num_chunks) as pool:
-        chunk_results = pool.map(process_data, chunks)
-    combined_corr = pd.DataFrame(np.zeros((df.shape[1], df.shape[1])), columns=df.columns, index=df.columns)
-    for chunk_corr in chunk_results:
-        combined_corr += chunk_corr
-    combined_corr /= num_chunks
-    filtered_corr_sp = combined_corr[(combined_corr > 0) & (combined_corr != 1.0)]
+    #num_chunks = mp.cpu_count()
+    #chunks = np.array_split(df, num_chunks)
+    #def process_data (df_chunk):
+    #    pearson_corr = df_chunk.corr(method='spearman')
+    #    return pearson_corr
+    #with mp.Pool(processes=num_chunks) as pool:
+    #    chunk_results = pool.map(process_data, chunks)
+    #combined_corr = pd.DataFrame(np.zeros((df.shape[1], df.shape[1])), columns=df.columns, index=df.columns)
+    #for chunk_corr in chunk_results:
+    #    combined_corr += chunk_corr
+    #combined_corr /= num_chunks
+    filtered_corr_sp = df.corr(method='spearman') #combined_corr[(combined_corr > 0) & (combined_corr != 1.0)]
     filtered_corr_sp = filtered_corr_sp.dropna(how='all').dropna(axis=1, how='all')
     filtered_corr_sp = filtered_corr_sp.loc[['prep_minutes']].dropna(axis=1)
     task_instance.xcom_push(key="spearman", value=filtered_corr_sp)
 
 def kendall(task_instance):
     df=task_instance.xcom_pull(key="df_data_proc", task_ids="data_processing_task")
-    num_chunks = mp.cpu_count()
-    chunks = np.array_split(df, num_chunks)
-    def process_data (df_chunk):
-        pearson_corr = df_chunk.corr(method='kendall')
-        return pearson_corr
-    with mp.Pool(processes=num_chunks) as pool:
-        chunk_results = pool.map(process_data, chunks)
-    combined_corr = pd.DataFrame(np.zeros((df.shape[1], df.shape[1])), columns=df.columns, index=df.columns)
-    for chunk_corr in chunk_results:
-        combined_corr += chunk_corr
-    combined_corr /= num_chunks
-    filtered_corr_kn = combined_corr[(combined_corr > 0) & (combined_corr != 1.0)]
+    #num_chunks = mp.cpu_count()
+    #chunks = np.array_split(df, num_chunks)
+    #def process_data (df_chunk):
+    #    pearson_corr = df_chunk.corr(method='kendall')
+    #    return pearson_corr
+    #with mp.Pool(processes=num_chunks) as pool:
+    #    chunk_results = pool.map(process_data, chunks)
+    #combined_corr = pd.DataFrame(np.zeros((df.shape[1], df.shape[1])), columns=df.columns, index=df.columns)
+    #for chunk_corr in chunk_results:
+    #    combined_corr += chunk_corr
+    #combined_corr /= num_chunks
+    filtered_corr_kn = df.corr(method='kendall') #combined_corr[(combined_corr > 0) & (combined_corr != 1.0)]
     filtered_corr_kn = filtered_corr_kn.dropna(how='all').dropna(axis=1, how='all')
     filtered_corr_kn = filtered_corr_kn.loc[['prep_minutes']].dropna(axis=1)
     task_instance.xcom_push(key="kendall", value=filtered_corr_kn)
