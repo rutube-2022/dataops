@@ -31,8 +31,8 @@ dag = DAG (
 
 def read_data(task_instance):
     count = int(Variable.get('count'))
-    part = int(Variable.get('part', default_var="Failure"))
-    if part == "Failure":
+    part = int(Variable.get('part', default_var=1000))
+    if part == 1000:
         Variable.set('part', 0)
         part = 0 
     if part > 9:
