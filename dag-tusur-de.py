@@ -181,11 +181,13 @@ def final_data_prepare(task_instance):
     kendall=task_instance.xcom_pull(key="kendall", task_ids="kendall_task")
     cor_columns = set(pearson.columns) | set(spearman.columns) | set(kendall.columns)
     cor_columns.add('prep_minutes')
+    print (cor_columns)
     df = df[list(cor_columns)]
     task_instance.xcom_push(key="df_final_data_prep", value=df)
 
 def ML(task_instance):
     df=task_instance.xcom_pull(key="df_final_data_prep", task_ids="final_data_prepare_task")
+    print (df.dtypes)
     X = df.drop(columns=['prep_minutes'])                                                                         #23
     y = df['prep_minutes']
     X_train, X_test, y_train, y_test = train_test_split(
