@@ -200,8 +200,7 @@ def ML(task_instance):
     mlflow.set_tracking_uri(uri="http://ml.fatal-error.ru:8181")
     if mlflow.get_experiment_by_name("Tusur-DE") is None:
         mlflow.create_experiment("Tusur-DE", artifact_location="s3://kserve/mlflow")
-    else:
-        mlflow.set_experiment("Tusur-DE")
+    mlflow.set_experiment("Tusur-DE")
     
     mlflow.start_run(run_name=f"PAR")
     for scor in ['neg_mean_squared_error', 'neg_mean_absolute_error', 'neg_mean_absolute_percentage_error', 'neg_median_absolute_error']:
