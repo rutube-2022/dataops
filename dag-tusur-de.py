@@ -340,7 +340,7 @@ def choose_task():
     if condition == 0:
         return 'ML_task'
     else:
-        return 'further_train'
+        return 'further_train_task'
     
 read_data_task = PythonOperator(
     task_id="read_data_task",
