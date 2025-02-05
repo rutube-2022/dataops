@@ -300,7 +300,8 @@ def ML(task_instance):
 
 def further_train(task_instance):
     df=task_instance.xcom_pull(key="df_final_data_prep", task_ids="final_data_prepare_task")
-    X = df.drop(columns=['prep_minutes'])                                                                         #23
+    print (df.dtypes)
+    X = df.drop(columns=['prep_minutes'])
     y = df['prep_minutes']
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.4,random_state=42)
