@@ -184,7 +184,7 @@ def final_data_prepare(task_instance):
         cor_columns.add('prep_minutes')
         Variable.set('cor_columns', cor_columns)
     else:
-        cor_columns = list(Variable.get('cor_columns'))
+        cor_columns = list(Variable.get('cor_columns', deserialize_json=True))
     print (cor_columns)
     df=task_instance.xcom_pull(key="df_data_proc", task_ids="data_processing_task")
     df = df[list(cor_columns)]
