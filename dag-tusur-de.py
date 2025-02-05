@@ -396,6 +396,4 @@ branching = BranchPythonOperator(
     dag=dag
     )
 
-read_data_task >> pre_cleaning_task >> formation_columns_task
-data_processing_task >> [pearson_task, spearman_task, kendall_task] >> final_data_prepare_task
-branching >> [ML_task, further_train_task]
+read_data_task >> pre_cleaning_task >> formation_columns_task >> data_processing_task >> [pearson_task, spearman_task, kendall_task] >> final_data_prepare_task >> branching >> [ML_task, further_train_task]
