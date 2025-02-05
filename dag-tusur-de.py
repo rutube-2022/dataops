@@ -407,6 +407,7 @@ final_data_prepare_task = PythonOperator(
     task_id="final_data_prepare_task",
     python_callable=final_data_prepare,
     dag=dag,
+    trigger_rule=none_failed
 )
 ML_task = PythonOperator(
     task_id="ML_task",
