@@ -1,5 +1,6 @@
 from airflow import DAG
 from airflow.models import Variable
+from datetime import datetime
 from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
 import sqlite3
 import pandas as pd
@@ -24,7 +25,9 @@ engine = sqlalchemy.create_engine("sqlite:////opt/airflow/variant1DB.db")
 
 dag = DAG (
     'tusur-de',
-    schedule_interval='*/15 * * * *')
+    schedule_interval='*/15 * * * *',
+    start_date=datetime(2025, 1, 1),
+    catchup=False)
 
 def read_data(task_instance):
     count = int(Variable.get('count', default_var=135169))
