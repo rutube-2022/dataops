@@ -336,7 +336,7 @@ def further_train(task_instance):
     Variable.set('part', part)
 
 def choose_task():
-    condition = Variable.get("part")
+    condition = int(Variable.get("part"))
     if condition == 0:
         return 'ML_task'
     else:
