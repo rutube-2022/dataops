@@ -175,13 +175,18 @@ def kendall(task_instance):
     task_instance.xcom_push(key="kendall", value=filtered_corr_kn)
 
 def final_data_prepare(task_instance):
-    df=task_instance.xcom_pull(key="df_data_proc", task_ids="data_processing_task")
-    pearson=task_instance.xcom_pull(key="pearson", task_ids="pearson_task")
-    spearman=task_instance.xcom_pull(key="spearman", task_ids="spearman_task")
-    kendall=task_instance.xcom_pull(key="kendall", task_ids="kendall_task")
-    cor_columns = set(pearson.columns) | set(spearman.columns) | set(kendall.columns)
-    cor_columns.add('prep_minutes')
+    part = int(Variable.get('part'))
+    if part == 0:
+        pearson=task_instance.xcom_pull(key="pearson", task_ids="pearson_task")
+        spearman=task_instance.xcom_pull(key="spearman", task_ids="spearman_task")
+        kendall=task_instance.xcom_pull(key="kendall", task_ids="kendall_task")
+        cor_columns = set(pearson.columns) | set(spearman.columns) | set(kendall.columns)
+        cor_columns.add('prep_minutes')
+        Variable.set('cor_columns', cor_columns)
+    else:
+        cor_columns = list(Variable.get('cor_columns'))
     print (cor_columns)
+    df=task_instance.xcom_pull(key="df_data_proc", task_ids="data_processing_task")
     df = df[list(cor_columns)]
     task_instance.xcom_push(key="df_final_data_prep", value=df)
 
@@ -354,6 +359,13 @@ def choose_task():
         return 'ML_task'
     else:
         return 'further_train_task'
+
+def choose_cor():
+    condition = int(Variable.get("part"))
+    if condition == 0:
+        return ['pearson_task', 'spearman_task', 'kendall_task']
+    else:
+        return 'final_data_prepare_task'
     
 read_data_task = PythonOperator(
     task_id="read_data_task",
@@ -411,5 +423,10 @@ branching = BranchPythonOperator(
     python_callable=choose_task,
     dag=dag
     )
+choose_cor = BranchPythonOperator(
+    task_id="choose_cor",
+    python_callable=choose_cor,
+    dag=dag
+    )
 
-read_data_task >> pre_cleaning_task >> formation_columns_task >> data_processing_task >> [pearson_task, spearman_task, kendall_task] >> final_data_prepare_task >> branching >> [ML_task, further_train_task]
+read_data_task >> pre_cleaning_task >> formation_columns_task >> data_processing_task >> choose_cor >> [pearson_task, spearman_task, kendall_task] >> final_data_prepare_task >> branching >> [ML_task, further_train_task]
