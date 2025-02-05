@@ -1,4 +1,5 @@
-from airflow import DAG, Variable
+from airflow import DAG
+from airflow.models import Variable
 from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
 import sqlite3
 import pandas as pd
