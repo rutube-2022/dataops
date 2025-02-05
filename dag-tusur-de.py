@@ -20,7 +20,7 @@ from mlflow.models import infer_signature
 from sklearn.linear_model import PassiveAggressiveRegressor
 from sklearn.preprocessing import StandardScaler
 
-
+count = Variable.set('count', 135169)
 engine = sqlalchemy.create_engine("sqlite:////opt/airflow/variant1DB.db")
 
 dag = DAG (
@@ -30,8 +30,11 @@ dag = DAG (
     catchup=False)
 
 def read_data(task_instance):
-    count = int(Variable.get('count', default_var=135169))
-    part = int(Variable.get('part', default_var=0))
+    count = int(Variable.get('count')
+    part = int(Variable.get('part', default_var=None))
+    if part is None:
+        Variable.set('part', 0)
+        part = 0 
     if part > 9:
         part = 0
         Variable.set('part', part)
