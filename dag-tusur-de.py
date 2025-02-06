@@ -122,17 +122,6 @@ def data_processing(task_instance):
 
 def pearson(task_instance):
     df=task_instance.xcom_pull(key="df_data_proc", task_ids="data_processing_task")
-    #num_chunks = mp.cpu_count()
-    #chunks = np.array_split(df, num_chunks)
-    #def process_data (df_chunk):
-    #    pearson_corr = df_chunk.corr(method='pearson')
-    #    return pearson_corr
-    #with mp.Pool(processes=num_chunks) as pool:
-    #    chunk_results = pool.map(process_data, chunks)
-    #combined_corr = pd.DataFrame(np.zeros((df.shape[1], df.shape[1])), columns=df.columns, index=df.columns)
-    #for chunk_corr in chunk_results:
-    #    combined_corr += chunk_corr
-    #combined_corr /= num_chunks
     combined_corr = df.corr(method='pearson')
     filtered_corr_ps = combined_corr[(combined_corr > 0) & (combined_corr != 1.0)]
     filtered_corr_ps = filtered_corr_ps.dropna(how='all').dropna(axis=1, how='all')
@@ -141,17 +130,6 @@ def pearson(task_instance):
 
 def spearman(task_instance):
     df=task_instance.xcom_pull(key="df_data_proc", task_ids="data_processing_task")
-    #num_chunks = mp.cpu_count()
-    #chunks = np.array_split(df, num_chunks)
-    #def process_data (df_chunk):
-    #    pearson_corr = df_chunk.corr(method='spearman')
-    #    return pearson_corr
-    #with mp.Pool(processes=num_chunks) as pool:
-    #    chunk_results = pool.map(process_data, chunks)
-    #combined_corr = pd.DataFrame(np.zeros((df.shape[1], df.shape[1])), columns=df.columns, index=df.columns)
-    #for chunk_corr in chunk_results:
-    #    combined_corr += chunk_corr
-    #combined_corr /= num_chunks
     combined_corr = df.corr(method='spearman')
     filtered_corr_sp = combined_corr[(combined_corr > 0) & (combined_corr != 1.0)]
     filtered_corr_sp = filtered_corr_sp.dropna(how='all').dropna(axis=1, how='all')
@@ -160,17 +138,6 @@ def spearman(task_instance):
 
 def kendall(task_instance):
     df=task_instance.xcom_pull(key="df_data_proc", task_ids="data_processing_task")
-    #num_chunks = mp.cpu_count()
-    #chunks = np.array_split(df, num_chunks)
-    #def process_data (df_chunk):
-    #    pearson_corr = df_chunk.corr(method='kendall')
-    #    return pearson_corr
-    #with mp.Pool(processes=num_chunks) as pool:
-    #    chunk_results = pool.map(process_data, chunks)
-    #combined_corr = pd.DataFrame(np.zeros((df.shape[1], df.shape[1])), columns=df.columns, index=df.columns)
-    #for chunk_corr in chunk_results:
-    #    combined_corr += chunk_corr
-    #combined_corr /= num_chunks
     combined_corr = df.corr(method='kendall')
     filtered_corr_kn = combined_corr[(combined_corr > 0) & (combined_corr != 1.0)]
     filtered_corr_kn = filtered_corr_kn.dropna(how='all').dropna(axis=1, how='all')
@@ -227,7 +194,6 @@ def ML(task_instance):
             max_iter = trial.suggest_int('max_iter', 100, 10000)
             tol = trial.suggest_float('tol', 1e-6, 1e-1)
             early_stopping = trial.suggest_categorical('early_stopping', [True, False])
-            #validation_fraction = trial.suggest_float('validation_fraction', 0.1, 1.0) if early_stopping==True else 0.1
             n_iter_no_change = trial.suggest_int('n_iter_no_change', 1, 10)
             shuffle = trial.suggest_categorical('shuffle', [True, False])
             loss = trial.suggest_categorical('loss', ['epsilon_insensitive', 'squared_epsilon_insensitive'])
@@ -239,7 +205,6 @@ def ML(task_instance):
                 max_iter=max_iter, 
                 tol=tol, 
                 early_stopping=early_stopping, 
-                #validation_fraction=validation_fraction, 
                 n_iter_no_change=n_iter_no_change, 
                 shuffle=shuffle, 
                 loss=loss, 
@@ -263,7 +228,6 @@ def ML(task_instance):
             max_iter=study.best_params.get('max_iter'), 
             tol=study.best_params.get('tol'), 
             early_stopping=study.best_params.get('early_stopping'), 
-            #validation_fraction=study.best_params.get('validation_fraction'), 
             n_iter_no_change=study.best_params.get('n_iter_no_change'), 
             shuffle=study.best_params.get('shuffle'), 
             loss=study.best_params.get('loss'), 
