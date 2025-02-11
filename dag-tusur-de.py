@@ -67,6 +67,7 @@ def formation_columns(task_instance):
     del dfs
     df = df.rename(columns={'count': 'items_count'})
     df['prep_minutes'] = (df['order_ready'] - df['order_start_prepare']).dt.total_seconds() / 60
+    df = df[df['prep_minutes'] > 0]
     df = df.drop(columns=['price', 'product_id', 'order_id', 'order_ready', 'planned_prep_time', 'order_start_prepare'])
     task_instance.xcom_push(key="df_form_col", value=df)
 
