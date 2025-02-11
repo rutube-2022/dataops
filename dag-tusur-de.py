@@ -25,7 +25,7 @@ engine = sqlalchemy.create_engine("sqlite:////opt/airflow/variant1DB.db")
 
 dag = DAG (
     'tusur-de',
-    schedule_interval='*/4 * * * *',
+    schedule_interval='*/6 * * * *',
     start_date=datetime(2025, 1, 1),
     catchup=False)
 
